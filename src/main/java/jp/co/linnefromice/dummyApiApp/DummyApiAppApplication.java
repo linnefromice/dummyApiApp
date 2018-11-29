@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Collection;
 
 @SpringBootApplication
+@EnableScheduling
 public class DummyApiAppApplication implements CommandLineRunner {
 
 	@Autowired
@@ -19,9 +21,10 @@ public class DummyApiAppApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception{
-		cacheManager.init();
-		Collection rateList = cacheManager.getRateCache();
-		Collection currencyList = cacheManager.getCurrencyCache();
+		System.out.println("### START ###");
+
+		Collection rateList = cacheManager.getRateCacheValues();
+		Collection currencyList = cacheManager.getCurrencyCacheValues();
 
 		System.out.println("## Currency ##");
 		currencyList.stream().forEach(System.out::println);
