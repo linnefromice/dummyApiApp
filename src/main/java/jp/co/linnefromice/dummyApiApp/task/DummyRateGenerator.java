@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class DummyRateGenerator {
@@ -18,16 +16,29 @@ public class DummyRateGenerator {
     @Autowired
     private CacheManager cacheManager;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 2500)
     public void generateRates() {
         System.out.println("## generateRates :"+new Date().toString()+" ##");
-        Collection currencies = cacheManager.getCurrencyCacheValues();
-        System.out.println("Currencys: "+currencies.toString());
-        // TODO: レート自動生成
-        /*
-        ConcurrentHashMap latestRateMap = cacheManager.getLatestRateMap();
-        Date generatedTime = new Date();
+        final String testCurrencyPairCode = "BTC/JPY";
+        Rate beforeRate = CacheManager.latestRateCacheMap.get(testCurrencyPairCode);
+        if (StringUtils.isEmpty(beforeRate)) {
+            return;
+        }
+        Rate newRate = new Rate();
+        String nextId = String.valueOf(Integer.parseInt(beforeRate.getId()) + 1);
+        newRate.setId(nextId);
+        newRate.setCurrencyPairCode(beforeRate.getCurrencyPairCode());
+        newRate.setMarketRate(beforeRate.getMarketRate().multiply(new BigDecimal(Math.random())));
+        newRate.setGeneratedTime(new Date());
+        CacheManager.latestRateCacheMap.replace(testCurrencyPairCode, newRate);
 
+        System.out.println("TEST Cache Confirm");
+        CacheManager.latestRateCacheMap.values().forEach(System.out::println);
+        System.out.println("TEST finish");
+        System.out.println("## finish :"+new Date().toString()+" ##");
+
+
+        /*
         currencies.stream().map(currency -> {
             Rate beforeRate = (Rate)latestRateMap.get(currency);
             if(StringUtils.isEmpty(beforeRate)) {
@@ -40,14 +51,13 @@ public class DummyRateGenerator {
             newRate.setToCurrencyCode(beforeRate.getToCurrencyCode());
             newRate.setMarketRate(beforeRate.getMarketRate().multiply(new BigDecimal(Math.random())));
             newRate.setGeneratedTime((Date)generatedTime.clone());
-            return latestRateMap.replace(currency, newRate);
+            Currency newCurrency = (Currency) currency;
+            cacheManager.replaceLatestRate(newCurrency, newRate);
+            return null;
         });
-
-        System.out.println("TEST Cache Confirm");
-
-        cacheManager.getLatestRateValues().stream().forEach(System.out::println);
-        System.out.println("TEST finish");
         */
-        System.out.println("## finish :"+new Date().toString()+" ##");
+
     }
+
+
 }

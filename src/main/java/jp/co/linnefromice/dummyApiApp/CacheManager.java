@@ -1,81 +1,45 @@
 package jp.co.linnefromice.dummyApiApp;
 
 import jp.co.linnefromice.dummyApiApp.domain.Currency;
+import jp.co.linnefromice.dummyApiApp.domain.CurrencyPair;
 import jp.co.linnefromice.dummyApiApp.domain.Rate;
+import jp.co.linnefromice.dummyApiApp.service.CurrencyPairService;
 import jp.co.linnefromice.dummyApiApp.service.CurrencyService;
 import jp.co.linnefromice.dummyApiApp.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CacheManager {
 
-    // Cache
-    /* レート情報のMap(toCurrencyCode, Rate) */
-    private ConcurrentHashMap rateMap = new ConcurrentHashMap<String, Rate>();
-    /* レート情報のMap(currencyCode, Currency) */
-    private ConcurrentHashMap currencyMap = new ConcurrentHashMap<String, Currency>();
-    /* レート情報のMap(Currency, Rate) */
-    private ConcurrentHashMap latestRateMap = new ConcurrentHashMap<Currency, Rate>();
+    public static ConcurrentHashMap<String, Currency> currencyCacheMap;
 
-    @Autowired
-    private RateService rateService;
+    public static ConcurrentHashMap<String, CurrencyPair> currencyPairCacheMap;
+
+    public static ConcurrentHashMap<String, Rate> latestRateCacheMap;
+
     @Autowired
     private CurrencyService currencyService;
+    @Autowired
+    private CurrencyPairService currencyPairService;
+    @Autowired
+    private RateService rateService;
+
+    private CacheManager() {
+        currencyCacheMap = new ConcurrentHashMap<String, Currency>();
+        currencyPairCacheMap = new ConcurrentHashMap<String, CurrencyPair>();
+        latestRateCacheMap = new ConcurrentHashMap<String, Rate>();
+    }
 
     @PostConstruct
-    public void init() {
-
-        // findAll
-        List<Rate> rateList = rateService.findAll();
-        List<Currency> currencyList = currencyService.findAll();
-
-        // create cache
-        rateList.stream().forEach(rate -> rateMap.put(rate.getToCurrencyCode(), rate));
-        currencyList.stream().forEach(currency -> currencyMap.put(currency.getCurrencyCode(), currency));
-        // TODO: 初期化 latestRateMap
-        // currencyList.stream().forEach(currency -> latestRateMap.put(currency, this.getRateByToCurrencyCode(currency.getCurrencyCode())));
-    }
-
-    public ConcurrentHashMap getRateMap() {
-        return this.rateMap;
-    }
-
-    public Collection getRateCacheValues() {
-        return rateMap.values();
-    }
-
-    public Rate getRateByToCurrencyCode(String toCurrencyCode) {
-        return (Rate)this.rateMap.get(toCurrencyCode);
-    }
-
-    public ConcurrentHashMap getCurrencyMap() {
-        return this.currencyMap;
-    }
-
-    public Collection getCurrencyCacheValues() {
-        return currencyMap.values();
-    }
-
-    public Currency getCurrencyByCurrencyCode(String currencyCode) {
-        return (Currency)this.currencyMap.get(currencyCode);
-    }
-
-    public ConcurrentHashMap getLatestRateMap() {
-        return this.latestRateMap;
-    }
-
-    public Collection getLatestRateValues() {
-        return currencyMap.values();
-    }
-
-    public Rate getLatestRateByCurrency(Currency currency) {
-        return (Rate)this.latestRateMap.get(currency);
+    private void init() {
+        System.out.println("■■ CacheManager 初期化 ■■");
+        currencyService.findAll().forEach(currency -> currencyCacheMap.put(currency.getCurrencyCode(), currency));
+        currencyPairService.findAll().forEach(currencyPair -> currencyPairCacheMap.put(currencyPair.getCurrencyPairCode(), currencyPair));
+        rateService.findAll().forEach(rate -> latestRateCacheMap.put(rate.getCurrencyPairCode(), rate));
+        System.out.println("■■ CacheManager 初期化終了 ■■");
     }
 }

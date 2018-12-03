@@ -1,12 +1,18 @@
 -- Currency
-insert into Currency (id, currency_code, currency_name) values ('1', 'JPY', 'yen');
-insert into Currency (id, currency_code, currency_name) values ('2', 'USD', 'dollar');
-insert into Currency (id, currency_code, currency_name) values ('3', 'BTC', 'Bitcoin');
-insert into Currency (id, currency_code, currency_name) values ('4', 'ETH', 'Ethereum');
-insert into Currency (id, currency_code, currency_name) values ('5', 'XEM', 'Xenixcoin');
-insert into Currency (id, currency_code, currency_name) values ('6', 'XRP', 'Ripple');
+insert into currency (currency_code, currency_name) values ('JPY', 'yen');
+insert into currency (currency_code, currency_name) values ('USD', 'dollar');
+insert into currency (currency_code, currency_name) values ('BTC', 'Bitcoin');
+insert into currency (currency_code, currency_name) values ('ETH', 'Ethereum');
+insert into currency (currency_code, currency_name) values ('XEM', 'Xenixcoin');
+insert into currency (currency_code, currency_name) values ('XRP', 'Ripple');
+-- CurrencyPair
+insert into currency_pair (id, currency_pair_code, settlement_currency, key_currency) values ('1', 'BTC/JPY', 'BTC', 'JPY');
+insert into currency_pair (id, currency_pair_code, settlement_currency, key_currency) values ('2', 'ETH/JPY', 'ETH', 'JPY');
+insert into currency_pair (id, currency_pair_code, settlement_currency, key_currency) values ('3', 'XEM/JPY', 'XEM', 'JPY');
+insert into currency_pair (id, currency_pair_code, settlement_currency, key_currency) values ('4', 'XRP/JPY', 'XRP', 'JPY');
+
 -- Rate
-insert into Rate (id, generated_time, from_currency_code, to_currency_code, market_rate) values ('1', sysdate, 'JPY', 'BTC', 420000);
-insert into Rate (id, generated_time, from_currency_code, to_currency_code, market_rate) values ('2', sysdate, 'JPY', 'ETH', 12000);
-insert into Rate (id, generated_time, from_currency_code, to_currency_code, market_rate) values ('3', sysdate, 'JPY', 'XEM', 8);
-insert into Rate (id, generated_time, from_currency_code, to_currency_code, market_rate) values ('4', sysdate, 'JPY', 'XRP', 50);
+insert into rate (id,  currency_pair_code, generated_time, market_rate) values ('1', 'BTC/JPY', sysdate, 420000);
+insert into rate (id,  currency_pair_code, generated_time, market_rate) values ('2', 'ETH/JPY', sysdate, 12000);
+insert into rate (id,  currency_pair_code, generated_time, market_rate) values ('3', 'XEM/JPY', sysdate, 8);
+insert into rate (id,  currency_pair_code, generated_time, market_rate) values ('4', 'XRP/JPY', sysdate, 50);

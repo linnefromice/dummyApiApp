@@ -6,17 +6,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "currency")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Currency {
+public class CurrencyPair {
 
     @Id
-    private String currencyCode;
+    private String id;
 
-    private String currencyName;
+    private String currencyPairCode;
+
+    private String settlementCurrency;
+
+    private String keyCurrency;
 }
