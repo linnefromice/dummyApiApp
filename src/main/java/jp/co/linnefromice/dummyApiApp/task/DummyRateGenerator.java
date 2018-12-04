@@ -18,6 +18,8 @@ public class DummyRateGenerator {
 
     @Scheduled(fixedDelay = 2500)
     public void generateRates() {
+
+        // TODO: たまにキャッシュ消える
         System.out.println("## generateRates :"+new Date().toString()+" ##");
         final String testCurrencyPairCode = "BTC/JPY";
         Rate beforeRate = CacheManager.latestRateCacheMap.get(testCurrencyPairCode);

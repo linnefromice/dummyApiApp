@@ -25,22 +25,4 @@ public class DummyApiAppApplication implements CommandLineRunner {
 		System.out.println("Hello world!");
 	}
 
-	/*
-	public void test1() {
-		System.out.println("### START ###");
-
-		Collection rateList = cacheManagerBk.getRateCacheValues();
-		Collection currencyList = cacheManagerBk.getCurrencyCacheValues();
-		Collection latestRateList = cacheManagerBk.getLatestRateValues();
-
-		System.out.println("## Currency ##");
-		currencyList.stream().forEach(System.out::println);
-		System.out.println("## Rate ##");
-		rateList.stream().forEach(System.out::println);
-		System.out.println("## LatestRate ##");
-		latestRateList.stream().forEach(System.out::println);
-		System.out.println("##########");
-		System.out.println("Hello world!");
-	}
-*/
 }

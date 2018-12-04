@@ -1,19 +1,15 @@
-package jp.co.linnefromice.dummyApiApp.controller;
+package jp.co.linnefromice.dummyApiApp.api;
 
 import jp.co.linnefromice.dummyApiApp.domain.Rate;
 import jp.co.linnefromice.dummyApiApp.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/rates")
-public class RateController {
+@RestController
+@RequestMapping("/api/rates")
+public class RateRestController {
 
     @Autowired
     private RateService rateService;
