@@ -16,7 +16,7 @@ public class DummyRateGenerator {
     @Autowired
     private CacheManager cacheManager;
 
-    @Scheduled(fixedDelay = 2500)
+    @Scheduled(fixedDelay = 10000)
     public void generateRates() {
 
         // TODO: たまにキャッシュ消える
